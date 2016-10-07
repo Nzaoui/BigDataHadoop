@@ -10,6 +10,7 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
+import org.apache.hadoop.yarn.webapp.hamlet.Hamlet.P;
 
 public class TP5 {
 	public static class TP5Mapper extends
@@ -18,6 +19,7 @@ public class TP5 {
 		public void map(IntWritable key, Point2DWritable value, Context context)
 				throws IOException, InterruptedException {
 
+		
 			context.write(key, value);
 
 		}
@@ -28,12 +30,27 @@ public class TP5 {
 		public void reduce(IntWritable key, Iterable<Point2DWritable> values,
 				Context context) throws IOException, InterruptedException {
 			
+			Counter Points_Valid = context.getCounter("count", "PointsValid");
 			Counter Number_Of_Points = context.getCounter("Count", "NumberOfPoints");
+			Counter Pi_Approx = context.getCounter("Count", "ApproxOfPi");
+	
 			for (Point2DWritable value : values){
 				
 				Number_Of_Points.increment(1);
-				context.write(key, new Text(value.ToString()));
+				//context.write(key, new Text(value.ToString()));
+				
+				if (((Math.pow(value.getX(),2))+(Math.pow(value.getY(),2)))<1)
+				{
+					Points_Valid.increment(1);
+				}
 			}
+			double ptsV = Points_Valid.getValue();
+			double nbrpts = Number_Of_Points.getValue();
+			double result =	(ptsV/nbrpts)*4;
+					System.out.println(result);
+			String str = "We have generated : "+nbrpts+" Points and that gives us an approximative value of Pi that is :"+result;
+			context.write(key,new Text(str) );
+
 		}
 		
 	}

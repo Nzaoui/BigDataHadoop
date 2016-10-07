@@ -25,7 +25,7 @@ public class RandomPointRecordReader extends RecordReader<IntWritable, Point2DWr
 	public boolean nextKeyValue() throws IOException, InterruptedException {
 		if (Counter < Max){
 			Counter ++;
-			p2dw = new Point2DWritable((Math.random()*1000), (Math.random()*1000));
+			p2dw = new Point2DWritable((Math.random()), (Math.random()));
 			return true;
 		}
 		else

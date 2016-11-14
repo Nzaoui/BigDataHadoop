@@ -13,8 +13,8 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
-public class TP3 {
-	public static class TP3Mapper extends
+public class TP4 {
+	public static class TP4Mapper extends
 			Mapper<Object, Text, Text, IntWritable> {
 
 		public void map(Object key, Text value, Context context)
@@ -184,7 +184,7 @@ public class TP3 {
 
 	}
 
-	public static class TP3Reducer extends
+	public static class TP4Reducer extends
 			Reducer<Text, IntWritable, Text, Text> {
 		public void reduce(Text key, Iterable<IntWritable> values,
 				Context context) throws IOException, InterruptedException {
@@ -266,13 +266,13 @@ public class TP3 {
 
 		conf.set("FragmentRate", args[0]);
 
-		Job job = Job.getInstance(conf, "TP3");
+		Job job = Job.getInstance(conf, "TP4");
 		job.setNumReduceTasks(1);
-		job.setJarByClass(TP3.class);
-		job.setMapperClass(TP3Mapper.class);
+		job.setJarByClass(TP4.class);
+		job.setMapperClass(TP4Mapper.class);
 		job.setMapOutputKeyClass(Text.class);
 		job.setMapOutputValueClass(IntWritable.class);
-		job.setReducerClass(TP3Reducer.class);
+		job.setReducerClass(TP4Reducer.class);
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(IntWritable.class);
 		job.setOutputFormatClass(TextOutputFormat.class);
